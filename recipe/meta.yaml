@@ -1,34 +1,33 @@
 {% set name = "azure-data-tables" %}
-{% set version = "12.4.2" %}
+{% set version = "12.4.0" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/azure-data-tables-{{ version }}.zip
-  sha256: 3b3d5d15b2a963e09b4934b1fe2ba217f29dd9ac51821c17549fcaf874702434
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.zip
+  sha256: dd5fc8de91e2f8908efa4c64ca7f63cf83b3068a9ba426298de3b54139e9665c
 
 build:
-  noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
   number: 0
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
+  skip: true  # [py<36]
 
 requirements:
   host:
     - pip
-    - python >=3.7
+    - python
+    - wheel
+    - setuptools
   run:
-    - python >=3.7
-    - azure-core <2.0.0,>=1.24.0
-    - yarl >=1.0,<2.0
-    - isodate >=0.6.0
-    - typing-extensions >=4.3.0
+    - python
+    - azure-core >=1.15.0,<2.0.0
+    - msrest >=0.6.21
 
 test:
   imports:
     - azure.data.tables
-    - azure.data.tables._generated
   commands:
     - pip check
   requires:
@@ -38,8 +37,16 @@ about:
   home: https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/table/azure-table
   summary: Microsoft Azure Azure Data Tables Client Library for Python
   license: MIT
-  license_file:
-    - LICENSE
+  license_file: LICENSE
+  license_family: MIT
+  description: |
+    Azure Tables is a NoSQL data storage service that can be accessed from anywhere
+    in the world via authenticated calls using HTTP or HTTPS. Tables scales as needed
+    to support the amount of data inserted, and allow for the storing of data with
+    non-complex accessing. The Azure Tables client can be used to access Azure Storage or Cosmos accounts.
+    This document covers azure-data-tables.
+  dev_url: https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/table/azure-table
+  doc_url: https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/table/azure-table
 
 extra:
   recipe-maintainers:
